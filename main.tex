@@ -1,0 +1,408 @@
+% Copyright 2004 by Till Tantau <tantau@users.sourceforge.net>.
+%
+% In principle, this file can be redistributed and/or modified under
+% the terms of the GNU Public License, version 2.
+%
+% However, this file is supposed to be a template to be modified
+% for your own needs. For this reason, if you use this file as a
+% template and not specifically distribute it as part of a another
+% package/program, I grant the extra permission to ntely copy and
+% modify this file as you see fit and even to delete this copyright
+% notice. 
+
+\documentclass{beamer}
+
+% There are many different themes available for Beamer. A comprehensive
+% list with examples is given here:
+% http://deic.uab.es/~iblanes/beamer_gallery/index_by_theme.html
+% You can uncomment the themes below if you would like to use a different
+% one:
+%\usetheme{AnnArbor}
+%\usetheme{Antibes}
+%\usetheme{Bergen}
+%\usetheme{Berkeley}
+%\usetheme{Berlin}
+\usetheme{Boadilla}
+%\usetheme{boxes}
+%\usetheme{CambridgeUS}
+%\usetheme{Copenhagen}
+%\usetheme{Darmstadt}
+%\usetheme{default}
+%\usetheme{Frankfurt}
+%\usetheme{Goettingen}
+%\usetheme{Hannover}
+%\usetheme{Ilmenau}
+%\usetheme{JuanLesPins}
+%\usetheme{Luebeck}
+%\usetheme{Madrid} % the best one
+%\usetheme{Malmoe}
+%\usetheme{Marburg}
+%\usetheme{Montpellier}
+%\usetheme{PaloAlto}
+%\usetheme{Pittsburgh} %no up-panel good 
+%\usetheme{Rochester}
+%\usetheme{Singapore}
+%\usetheme{Szeged}
+%\usetheme{Warsaw}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{subfigure}
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
+\usepackage{tabu}
+
+\def\A{{\bf A}}
+\def\B{{\bf B}}
+\def\X{{\bf X}}
+\def\C{{\bf C}}
+\def\D{{\bf D}}
+\def\a{{\bf a}}
+\def\b{{\bf b}}
+\def\MO{{\mathcal O}}
+\def\BR{{\mathbb R}}
+
+\title[FD-AMM]{Frequent Direction Algorithms for Approximate Matrix Multiplication with Applications in CCA}
+
+% A subtitle is optional and this may be deleted
+%\subtitle{Optional Subtitle}
+
+\author{Qiaomin Ye \and Luo Luo \and Zhihua Zhang}
+% - Give the names in the same order as the appear in the paper.
+% - Use the \inst{?} command only if the authors have different
+%   affiliation.
+
+\institute[] % (optional, but mostly needed)
+{
+  Department of Computer Science and Engineering \\
+  Shanghai Jiao Tong University
+  }
+% - Use the \inst command only if there are several affiliations.
+% - Keep it simple, no one is interested in your street address.
+
+\date{IJCAI, 2016}
+% - Either use conference name or its abbreviation.
+% - Not really informative to the audience, more for people (including
+%   yourself) who are reading the slides online
+
+\subject{Theoretical Computer Science}
+% This is only inserted into the PDF information catalog. Can be left
+% out. 
+
+% If you have a file called "university-logo-filename.xxx", where xxx
+% is a graphic format that can be processed by latex or pdflatex,
+% resp., then you can add a logo as follows:
+
+% \pgfdeclareimage[height=0.5cm]{university-logo}{university-logo-filename}
+% \logo{\pgfuseimage{university-logo}}
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+\AtBeginSubsection[]
+{
+  \begin{frame}<beamer>{Outline}
+    \tableofcontents[currentsection,currentsubsection]
+  \end{frame}
+}
+
+% Let's get started
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Outline}
+  \tableofcontents
+  % You might wish to add the option [pausesections]
+\end{frame}
+
+% Section and subsections will appear in the presentation overview
+% and table of contents.
+\section{Introduction}
+
+%\subsection{First Subsection}
+
+
+\begin{frame}{Introduction}
+	  %  \begin{block}{Approximate matrix multiplication}
+	   % 	\includegraphics*[scale=0.278]{figures/test.pdf}  
+	   % \end{block}
+	          
+	  
+		\begin{block}{Approximate matrix multiplication}
+			we are given $A$, $B$ each with a large number of rows $n$, and the goal is to compute some matrix $X$, s.t. 
+			$$\Vert A^TB - X \Vert_X$$ %\centerdot
+			is small, for some matrix norm $\Vert \cdot  \Vert_X$. 
+		\end{block}
+		%	\includegraphics*[scale=0.278]{figures/test.pdf}  
+		\pause
+		
+  \begin{itemize}
+  \item {
+    Image processing
+  }
+  \item {
+     Information retrieval
+  }
+  \item{
+  	Approximate leverage scores
+  	 }
+  	 \item { 
+  	 	Large-scale $k$-means clustering
+  	 	}
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}{Introduction}
+	  \begin{block}{Approximate matrix multiplication}
+	 	\includegraphics*[scale=0.278]{figures/test.pdf}  
+	 \end{block}
+	
+	
+%	\begin{block}{Approximate matrix multiplication}
+	%	we are given $A$, $B$ each with a large number of rows $n$, and the goal is to compute some matrix $X$, s.t. 
+	%	$$\Vert A^TB - X \Vert_X$$ %\centerdot
+%		is small, for some matrix norm $\Vert \cdot  \Vert_X$. 
+%	\end{block}
+	%	\includegraphics*[scale=0.278]{figures/test.pdf}  
+	
+	\begin{itemize}
+		\item {
+			Image processing
+		}
+		\item {
+			Information retrieval
+		}
+		\item{
+			Approximate leverage scores
+		}
+		\item { 
+			Large-scale $k$-means clustering
+		}
+	\end{itemize}
+	
+\end{frame}
+
+\begin{frame} {Streaming Matrices}
+	
+	%	\includegraphics*[scale=0.278]{figures/test.pdf}  
+	\begin{itemize}
+		\item Matrix too large to be stored.
+	
+		\item Streaming setting:
+		\begin{itemize}
+			\item Use a small amount of memory.
+			\item Make a single pass over the data. 
+		\end{itemize}
+	\end{itemize}
+	\pause 
+	$$A^TB=\sum_i^n a_i^Tb_i$$
+	\begin{block}{Naive solution}
+		Compute $A^TB$ in time $\MO(nm_1m_2)$.% and space $\MO(m_1m_2)$. 
+	\end{block}
+\end{frame} 
+
+\section{Related Work}
+\subsection{Random Selection}
+\begin{frame}{Random Selection}
+  \begin{itemize}
+  \item {
+    Random Selection. 
+    It randomly picks $\ell$ rows of $A$ and $B$ with probability 
+    $$p_i=\Vert a_i \Vert \Vert b_i \Vert /  \sum_{i=1}^n \Vert a_i \Vert \Vert b_i \Vert,$$
+    and with high probability, 
+    $$\Vert A^TB - C^TD \Vert_2 \leq \frac{\MO(1)}{\sqrt{\ell}} \Vert A \Vert_F \Vert B \Vert_F.$$    
+  }
+ 	\begin{block}{Random Selection}
+ 		Get $C$ and $D$ in time $\MO(n(m_1+m_2)))$. %and space $\MO(\ell(m_1+m_2))$. 
+ 	\end{block}
+ 
+  \end{itemize}
+\end{frame}
+
+\subsection{Random Projection}
+\begin{frame}{Random Projection}
+\begin{itemize}
+	\item{
+		Random Projection. 
+	Let $\Pi\in \BR^{\ell \times n}$  be some subspace embedding, then  
+	$$\Vert A^TB -  (\Pi A)^T(\Pi B)  \Vert_2 \leq \sqrt{\frac{\MO(r)}{\ell}} \Vert A \Vert_2 \Vert B \Vert_2 $$
+	holds with high probability, where $r=rank(A)+rank(B)$. For fast or sparse subspace embedding, $\Pi A$ and $\Pi B$ can be computed quickly. 
+}
+	\begin{block}{Random Projection}
+		For dense $\Pi$, get $C$ and $D$ in time $\MO(n\ell(m_1+m_2))$.  \\% and space $\MO(m_1m_2)$. \\
+		For sparse $\Pi$, get $C$ and $D$ in time $\MO(nnz(A)+nnz(B))$. %and space todo
+	\end{block}
+
+\end{itemize}
+\end{frame}
+
+\section{Methodology}
+
+\subsection{Frequent Directions} 
+
+\begin{frame}{Frequent Directions}
+\begin{block}{FD (Edo Liberty 2013)}
+	Give $A\in \BR^{d\times n}$, FD efficiently maintains a matrix $B$ with only $\ell$ columns s.t. 
+ $$\Vert AA^T  - BB^T \Vert_2 \le 2 \Vert A\Vert_F^2/\ell, $$
+\end{block}
+
+The FD algorithm runs in time $\MO(nd\ell)$. %  and space $\MO(d\ell)$.
+\end{frame}
+
+\begin{frame}
+	\begin{center}
+		\begin{tabular}{ccc}
+			\includegraphics*[scale=0.23]{figures/FD1.pdf} &
+			   \includegraphics*[scale=0.23]{figures/FD2_white.png} 
+			&  \includegraphics*[scale=0.23]{figures/FD3_white.png}  \\
+			%	(a)  & (b) & (c)   \\
+			\includegraphics*[scale=0.23]{figures/FD4_white.png}  
+			& \includegraphics*[scale=0.23]{figures/FD5_white.png}  
+			 & \includegraphics*[scale=0.23]{figures/FD3_white.png} 
+			\\
+		\end{tabular} 
+	\end{center}
+	
+	We keep a sketch of $\ell$ columns. 
+	
+\end{frame}
+
+\begin{frame}
+	\begin{center}
+		\begin{tabular}{ccc}
+			\includegraphics*[scale=0.23]{figures/FD1.pdf} &
+			\includegraphics*[scale=0.23]{figures/FD2.pdf} 
+			&  \includegraphics*[scale=0.23]{figures/FD3_white.png}  \\
+			%	(a)  & (b) & (c)   \\
+			\includegraphics*[scale=0.23]{figures/FD4_white.png}  
+			& \includegraphics*[scale=0.23]{figures/FD5_white.png}  
+			& \includegraphics*[scale=0.23]{figures/FD3_white.png} 
+			\\
+		\end{tabular} 
+	\end{center}
+	Input vectors are simply stored in empty columns. 
+	
+\end{frame}
+
+\begin{frame}
+	\begin{center}
+		\begin{tabular}{ccc}
+			\includegraphics*[scale=0.23]{figures/FD1.pdf} &
+			\includegraphics*[scale=0.23]{figures/FD2.pdf} 
+			&  \includegraphics*[scale=0.23]{figures/FD3.png}  \\
+			%	(a)  & (b) & (c)   \\
+			\includegraphics*[scale=0.23]{figures/FD4_white.png}  
+			& \includegraphics*[scale=0.23]{figures/FD5_white.png}  
+			& \includegraphics*[scale=0.23]{figures/FD3_white.png} 
+			\\
+		\end{tabular} 
+	\end{center}
+	When the sketch is 'full' we need to zero out some columns.
+	
+\end{frame}
+
+\begin{frame}
+	\begin{center}
+		\begin{tabular}{ccc}
+			\includegraphics*[scale=0.23]{figures/FD1.pdf} &
+			\includegraphics*[scale=0.23]{figures/FD2.pdf} 
+			&  \includegraphics*[scale=0.23]{figures/FD3.png}  \\
+			%	(a)  & (b) & (c)   \\
+			\includegraphics*[scale=0.23]{figures/FD4.png}  
+			& \includegraphics*[scale=0.23]{figures/FD5_white.png}  
+			& \includegraphics*[scale=0.23]{figures/FD3_white.png} 
+			\\
+		\end{tabular} 
+	\end{center}
+	Using the SVD we compute $B=USV^T$ and set $B_{new}=US$. 
+\end{frame}
+
+\begin{frame}
+	\begin{center}
+		\begin{tabular}{ccc}
+			\includegraphics*[scale=0.23]{figures/FD1.pdf} &
+			\includegraphics*[scale=0.23]{figures/FD2.pdf} 
+			&  \includegraphics*[scale=0.23]{figures/FD3.png}  \\
+			%	(a)  & (b) & (c)   \\
+			\includegraphics*[scale=0.23]{figures/FD4.png}  
+			& \includegraphics*[scale=0.23]{figures/FD5.png}  
+			& \includegraphics*[scale=0.23]{figures/FD3_white.png} 
+			\\
+		\end{tabular} 
+	\end{center}
+	Let $\sigma = \Vert B_{\ell/ 2} \Vert^2$.
+\end{frame}
+
+\begin{frame}
+	     \begin{center}
+	     	\begin{tabular}{ccc}
+	     		\includegraphics*[scale=0.23]{figures/FD1.pdf} &
+	     		\includegraphics*[scale=0.23]{figures/FD2.pdf}  &
+	     		\includegraphics*[scale=0.23]{figures/FD3.png} \\
+	     	%	(a)  & (b) & (c)   \\
+	     		\includegraphics*[scale=0.23]{figures/FD4.png} &
+	     		\includegraphics*[scale=0.23]{figures/FD5.png}  &
+	     		\includegraphics*[scale=0.23]{figures/FD1.pdf} \\
+	     		
+	     	\end{tabular} 
+	     \end{center}
+\end{frame}
+
+\subsection{FD-AMM}
+\begin{frame}{FD-AMM}
+	
+	\vspace{0.3cm}
+	\renewcommand{\arraystretch}{1.1}
+	%\begin{tabu} {|[2pt]l|[2pt]}
+	\begin{tabu} to 1.0\textwidth {  X[ll]   }
+		\tabucline[1pt]{-}
+		\textbf{Algorithm 2} FD-AMM \\
+		\tabucline[1pt]{-} 
+		\textbf{Input:} $\ell$, $A \in R^{n\times m_1}$, $B\in \BR^{n\times m_2}$ \\ 
+		~~~~~\alert{$G = [A\ B]$} \\
+		% ~~~~~   \\ 
+		~~~~~\alert{$H =$ FD$(\ell, G)$}\\
+		~~~~~$C = H_{[\ell],1:m_1}$ \\ 
+		~~~~~$D =H_{[\ell],m_1+1:m_1+m_2}$  \\
+		~~~~~\textbf{return} $C$, $D$ \\
+		\tabucline[1pt]{-}
+	\end{tabu}
+	\pause
+\begin{theorem}
+	  If $X$ is the result of applying the FD-AMM algorithm to matrices $A$, $B$, and sketch size $\ell$, then  
+	  $$\Vert A^TB-C^TD\Vert_2 \le (\Vert A\Vert_F^2+\Vert B\Vert_F^2)/\alert{\ell}. $$  
+	
+\end{theorem}	
+	
+\end{frame}
+
+\section{Experiments}
+\begin{frame}{Experiments}
+		$\Vert A^TB- C^TD \Vert_2$ as a function of the sketch size $\ell$. 
+		\begin{center}
+				\includegraphics*[scale=0.8]{figures/ms2.pdf} 
+		\end{center}
+	
+\end{frame}
+
+
+\begin{frame}
+	Running time in second as a function of $\ell$. 
+		\begin{center}
+			\includegraphics*[scale=0.8]{figures/time.pdf} 
+		\end{center}
+\end{frame}
+
+\begin{frame} 
+	\begin{center}
+		\large {Thank You}
+	\end{center}
+	
+\end{frame}
+
+\end{document}
+
+
